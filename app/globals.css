@@ -4,7 +4,7 @@ html {
     overscroll-behavior: none;
     margin: 0;
     padding: 0;
-    background-color: #cfafd0;
+    background-color: #ffdff3;
 }
 
 @-webkit-keyframes slidetounlock {
@@ -879,7 +879,61 @@ html {
     }
 }
 
+/* Mobile optimization for screens 640px and below */
+@media (max-width:640px) {
+    .page-full-wrap {
+        width: 90%;
+        padding: 0 20px;
+        padding-bottom: 80px
+    }
+
+    .mt-48 {
+        margin-top: 24px
+    }
+
+    .mt-24 {
+        margin-top: 16px
+    }
+
+    .page-full-wrap img {
+        max-width: 85%;
+        height: auto
+    }
+
+    .link-each-image {
+        width: 35px;
+        height: 35px;
+        left: 12px
+    }
+
+    .page-item-each {
+        min-height: 56px;
+        font-size: 15px;
+        padding: 12px 10px
+    }
+
+    .item-title {
+        width: 60%;
+        font-size: 15px
+    }
+}
+
 @media (max-width:480px) {
+    .page-full-wrap {
+        width: 92%;
+        padding: 0 16px;
+        padding-bottom: 60px
+    }
+
+    .mt-48 {
+        margin-top: 16px
+    }
+
+    .page-full-wrap img {
+        max-width: 80%;
+        height: auto
+    }
+
     .campaign-main-wrap {
         width: 100%;
         padding: 0 24px
@@ -957,6 +1011,22 @@ html {
     .featured-subscribers .subsc-title {
         margin-top: 38px;
         width: calc(100% - 20px)
+    }
+
+    .link-each-image {
+        width: 32px;
+        height: 32px;
+        left: 10px
+    }
+
+    .page-item-each {
+        min-height: 52px;
+        font-size: 14px
+    }
+
+    .item-title {
+        width: 65%;
+        font-size: 14px
     }
 }
 
