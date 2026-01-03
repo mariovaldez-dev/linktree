@@ -8,10 +8,11 @@ const redirects: Record<string, string> = {
 
 export async function GET(
     request: Request,
-    { params }: { params: { platform: string } }
+    { params }: { params: Promise<{ platform: string }> }
 ) {
-    const platform = params.platform.toLowerCase();
-    const url = redirects[platform];
+    const { platform } = (await params);
+    const platformKey = platform.toLowerCase();
+    const url = redirects[platformKey];
 
     if (url) {
         return NextResponse.redirect(url, 307);
