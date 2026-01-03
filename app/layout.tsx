@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   authors: [
     {
       name: "Mordisqueo Snacks",
-      url: "https://mordisqueo.com",
+      url: "https://mordisqueo.mx",
     },
   ],
   icons: {
