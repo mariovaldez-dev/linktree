@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 
 const redirects: Record<string, string> = {
     instagram: 'https://instagram.com/mordisqueomx',
@@ -7,10 +7,11 @@ const redirects: Record<string, string> = {
 };
 
 export async function GET(
-    request: Request,
-    { params }: { params: Promise<{ platform: string }> }
+    request: NextRequest,
+    props: { params: Promise<{ platform: string }> }
 ) {
-    const { platform } = (await params);
+    const params = await props.params;
+    const { platform } = params;
     const platformKey = platform.toLowerCase();
     const url = redirects[platformKey];
 
