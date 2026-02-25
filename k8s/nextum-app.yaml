@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: nextumlabs-app-container
-        image: us-central1-docker.pkg.dev/nextum-labs/nextum-repo/nextumlabs-app:latest
+        image: us-central1-docker.pkg.dev/nextum-labs/nextumlabs-repo/nextumlabs-app:latest
         ports:
         - containerPort: 3000
         resources:
