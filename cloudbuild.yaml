@@ -14,3 +14,6 @@ steps:
   - --filename=/nextum/backend/javaapi/nextum-app.yaml # Tu archivo de despliegue
   - --location=us-central1
   - --cluster=nextum-cluster
+# --- ESTA ES LA PARTE QUE DEBES AGREGAR ---
+options:
+  logging: CLOUD_LOGGING_ONLY
