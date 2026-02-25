@@ -1,19 +1,25 @@
 steps:
-# 1. Construir la imagen de Docker
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/nextum-labs/nextumlabs-repo/nextumlabs-app:$COMMIT_SHA', '.']
+# 1. Construir (Agregamos la etiqueta :latest)
+- name: 'Build images'
+  args: 
+    - 'build'
+    - '-t'
+    - 'us-central1-docker.pkg.dev/nextum-labs/nextumlabs-repo/nextumlabs-app:$COMMIT_SHA'
+    - '-t'
+    - 'us-central1-docker.pkg.dev/nextum-labs/nextumlabs-repo/nextumlabs-app:latest'
+    - '.'
 
-# 2. Subirla al Artifact Registry que creamos
-- name: 'gcr.io/cloud-builders/docker'
+# 2. Subir ambas etiquetas
+- name: 'Upload images'
   args: ['push', 'us-central1-docker.pkg.dev/nextum-labs/nextumlabs-repo/nextumlabs-app:$COMMIT_SHA']
 
-# 3. Actualizar la imagen en el clúster automáticamente
-- name: 'gcr.io/cloud-builders/gke-deploy'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/nextum-labs/nextumlabs-repo/nextumlabs-app:latest']
+
+# 3. Desplegar
+- name: 'Deploy'
   args:
   - run
-  - --filename=k8s/nextum-app.yaml # Tu archivo de despliegue
+  - --filename=k8s/nextum-app.yaml
   - --location=us-central1
   - --cluster=nextumlabs-cluster
-# --- ESTA ES LA PARTE QUE DEBES AGREGAR ---
-options:
-  logging: CLOUD_LOGGING_ONLY
