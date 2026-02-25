@@ -7,7 +7,7 @@ COPY . .
 RUN npm run build
 
 # 2. Etapa de ejecución
-FROM node:2O-alpine AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV production
 # Copiamos solo lo necesario para que la imagen sea ligera
