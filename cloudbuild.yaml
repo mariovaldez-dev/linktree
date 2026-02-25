@@ -1,0 +1,16 @@
+steps:
+# 1. Construir la imagen de Docker
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/nextum-repo/frontend-test:$COMMIT_SHA', '.']
+
+# 2. Subirla al Artifact Registry que creamos
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/nextum-repo/frontend-test:$COMMIT_SHA']
+
+# 3. Actualizar la imagen en el clúster automáticamente
+- name: 'gcr.io/cloud-builders/gke-deploy'
+  args:
+  - run
+  - --filename=/nextum/backend/javaapi/nextum-app.yaml # Tu archivo de despliegue
+  - --location=us-central1
+  - --cluster=nextum-cluster
