@@ -16,7 +16,7 @@ spec:
       containers:
       - name: nextumlabs-app-container
         # REEMPLAZA [TU_PROJECT_ID] por el tuyo real
-        image: us-central1-docker.pkg.dev/[TU_PROJECT_ID]/nextum-repo/nextumlabs-app:latest
+        image: us-central1-docker.pkg.dev/$PROJECT_ID/nextum-repo/nextumlabs-app:latest
         ports:
         - containerPort: 3000 # <--- El puerto real de Next.js
 ---
