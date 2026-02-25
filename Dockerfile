@@ -1,21 +1,40 @@
-# 1. Etapa de construcción
+# 1. Instalación de dependencias
+FROM node:20-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+# 2. Construcción (Build)
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Desactivar telemetría de Next.js
+ENV NEXT_TELEMETRY_DISABLED 1
+
 RUN npm run build
 
-# 2. Etapa de ejecución
+# 3. Ejecución (Runner)
 FROM node:20-alpine AS runner
 WORKDIR /app
+
 ENV NODE_ENV production
-# Copiamos solo lo necesario para que la imagen sea ligera
-COPY --from=builder /app/next.config.js ./
+ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copiamos los archivos necesarios del output standalone
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
 
 EXPOSE 3000
-CMD ["npm", "start"]
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+CMD ["node", "server.js"]
