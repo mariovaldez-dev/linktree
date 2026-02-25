@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nextumlabs-app
-  namespace: nextum-dev # <--- Fundamental para que el Ingress lo vea
+  namespace: nextum-dev
 spec:
   replicas: 1
   selector:
@@ -15,21 +15,27 @@ spec:
     spec:
       containers:
       - name: nextumlabs-app-container
-        # REEMPLAZA [TU_PROJECT_ID] por el tuyo real
-        image: us-central1-docker.pkg.dev/$PROJECT_ID/nextum-repo/nextumlabs-app:latest
+        image: us-central1-docker.pkg.dev/nextum-labs/nextum-repo/nextumlabs-app:latest
         ports:
-        - containerPort: 3000 # <--- El puerto real de Next.js
+        - containerPort: 3000
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "200m"
+            memory: "512Mi"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: nextumlabs-backend-service
-  namespace: nextum-dev # <--- Mismo namespace
+  namespace: nextum-dev
 spec:
   type: NodePort
   selector:
-    app: nextumlabs-app # <--- Debe coincidir con el label del Deployment arriba
+    app: nextumlabs-app
   ports:
     - protocol: TCP
-      port: 80         # El puerto que recibe el tráfico del Ingress
-      targetPort: 3000 # El puerto hacia donde lo manda (tu App)
+      port: 80
+      targetPort: 3000
