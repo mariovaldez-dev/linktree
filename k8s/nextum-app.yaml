@@ -1,32 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nextumlabs-app
+  name: nextjs-linktree
+  namespace: nextum-prod # <--- Fundamental para que el Ingress lo vea
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nextumlabs-app
+      app: nextjs-linktree
   template:
     metadata:
       labels:
-        app: nextumlabs-app
+        app: nextjs-linktree
     spec:
       containers:
-      - name: hello-app
-        image: us-docker.pkg.dev/google-samples/containers/gke/hello-app:1.0
+      - name: linktree-container
+        # REEMPLAZA [TU_PROJECT_ID] por el tuyo real
+        image: us-central1-docker.pkg.dev/[TU_PROJECT_ID]/nextum-repo/nextjs-app:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 3000 # <--- El puerto real de Next.js
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: nextumlabs-backend-service # EL NOMBRE EXACTO QUE BUSCA TU INGRESS
+  name: nextumlabs-backend-service
+  namespace: nextum-prod # <--- Mismo namespace
 spec:
   type: NodePort
   selector:
-    app: nextumlabs-app
+    app: nextjs-linktree # <--- Debe coincidir con el label del Deployment arriba
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 8080
+      port: 80         # El puerto que recibe el tráfico del Ingress
+      targetPort: 3000 # El puerto hacia donde lo manda (tu App)
